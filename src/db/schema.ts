@@ -29,8 +29,9 @@ export const books = pgTable("books", {
   stock: integer("stock").notNull().default(0),
   language: text("language").notNull().default("English"),
   featured: boolean("featured").notNull().default(false),
+  sellerId: uuid("seller_id").references(() => profiles.id, { onDelete: "set null" }),
   createdAt: createdAt(),
-}, (t) => [index("books_category_idx").on(t.categoryId)]);
+}, (t) => [index("books_seller_idx").on(t.sellerId), index("books_category_idx").on(t.categoryId)]);
 
 export const profiles = pgTable("profiles", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -106,6 +107,9 @@ export const orderItems = pgTable("order_items", {
   title: text("title").notNull(),
   quantity: integer("quantity").notNull(),
   unitPriceCents: integer("unit_price_cents").notNull(),
+  sellerId: uuid("seller_id").references(() => profiles.id, { onDelete: "set null" }),
+  feeCents: integer("fee_cents").notNull().default(0),
+  sellerEarningsCents: integer("seller_earnings_cents").notNull().default(0),
 });
 
 export const posts = pgTable("posts", {

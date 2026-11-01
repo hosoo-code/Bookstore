@@ -8,13 +8,13 @@ export function toLocale(value: string | undefined | null): Locale {
 
 const en = {
   "nav.home": "Home", "nav.books": "Books", "nav.categories": "Categories", "nav.feed": "Feed", "nav.about": "About", "nav.contact": "Contact",
-  "nav.allBooks": "All Books", "nav.featured": "Featured Books", "nav.english": "English Books", "nav.german": "German Books",
+  "nav.allBooks": "All Books", "nav.featured": "Featured Books", "nav.english": "English Books", "nav.german": "German Books", "nav.mongolian": "Mongolian Books", "nav.sell": "Sell",
   "nav.messages": "Messages", "nav.notifications": "Notifications", "nav.settings": "Settings", "nav.createAccount": "Create an Account",
   "nav.search": "Search", "nav.profile": "Your profile", "nav.login": "Log in", "nav.quick": "Quick navigation", "nav.language": "Language",
   "search.placeholder": "Search books...",
   "hero.eyebrow": "Welcome to your next chapter", "hero.subtitle": "Two languages. One world of books.",
   "hero.desc": "Discover a vast collection of books in English and German, and find your next favorite read.", "hero.button": "Explore Books",
-  "home.featured": "Featured Books", "home.english": "English Books", "home.german": "German Books", "home.viewAll": "View all", "home.viewAllBooks": "View all books",
+  "home.featured": "Featured Books", "home.english": "English Books", "home.german": "German Books", "home.mongolian": "Mongolian Books", "home.viewAll": "View all", "home.viewAllBooks": "View all books",
   "home.corner": "The reading corner", "home.fromReaders": "From Our Readers", "home.exploreFeed": "Explore the Feed", "home.join": "Join the conversation",
   "home.emptyTitle": "A community for every chapter.", "home.emptyDesc": "Share what you’re reading, swap recommendations, and meet people who love the same stories as you.", "home.exploreReader": "Explore Reader Feed",
   "book.add": "Add to Cart", "book.out": "Out of Stock",
@@ -31,13 +31,13 @@ export type Key = keyof typeof en;
 
 const de: Record<Key, string> = {
   "nav.home": "Startseite", "nav.books": "Bücher", "nav.categories": "Kategorien", "nav.feed": "Feed", "nav.about": "Über uns", "nav.contact": "Kontakt",
-  "nav.allBooks": "Alle Bücher", "nav.featured": "Empfohlene Bücher", "nav.english": "Englische Bücher", "nav.german": "Deutsche Bücher",
+  "nav.allBooks": "Alle Bücher", "nav.featured": "Empfohlene Bücher", "nav.english": "Englische Bücher", "nav.german": "Deutsche Bücher", "nav.mongolian": "Mongolische Bücher", "nav.sell": "Verkaufen",
   "nav.messages": "Nachrichten", "nav.notifications": "Benachrichtigungen", "nav.settings": "Einstellungen", "nav.createAccount": "Konto erstellen",
   "nav.search": "Suchen", "nav.profile": "Dein Profil", "nav.login": "Anmelden", "nav.quick": "Schnellnavigation", "nav.language": "Sprache",
   "search.placeholder": "Bücher suchen...",
   "hero.eyebrow": "Willkommen zu deinem nächsten Kapitel", "hero.subtitle": "Zwei Sprachen. Eine Welt voller Bücher.",
   "hero.desc": "Entdecke eine große Auswahl an englischen und deutschen Büchern und finde dein nächstes Lieblingsbuch.", "hero.button": "Bücher entdecken",
-  "home.featured": "Empfohlene Bücher", "home.english": "Englische Bücher", "home.german": "Deutsche Bücher", "home.viewAll": "Alle ansehen", "home.viewAllBooks": "Alle Bücher ansehen",
+  "home.featured": "Empfohlene Bücher", "home.english": "Englische Bücher", "home.german": "Deutsche Bücher", "home.mongolian": "Mongolische Bücher", "home.viewAll": "Alle ansehen", "home.viewAllBooks": "Alle Bücher ansehen",
   "home.corner": "Die Leseecke", "home.fromReaders": "Von unseren Lesern", "home.exploreFeed": "Feed entdecken", "home.join": "Diskussion beitreten",
   "home.emptyTitle": "Eine Gemeinschaft für jedes Kapitel.", "home.emptyDesc": "Teile, was du liest, tausche Empfehlungen aus und lerne Menschen kennen, die dieselben Geschichten lieben.", "home.exploreReader": "Leser-Feed entdecken",
   "book.add": "In den Warenkorb", "book.out": "Nicht auf Lager",
@@ -53,13 +53,13 @@ const de: Record<Key, string> = {
 
 const mn: Record<Key, string> = {
   "nav.home": "Нүүр", "nav.books": "Номууд", "nav.categories": "Ангилал", "nav.feed": "Мэдээлэл", "nav.about": "Бидний тухай", "nav.contact": "Холбоо барих",
-  "nav.allBooks": "Бүх ном", "nav.featured": "Онцлох ном", "nav.english": "Англи ном", "nav.german": "Герман ном",
+  "nav.allBooks": "Бүх ном", "nav.featured": "Онцлох ном", "nav.english": "Англи ном", "nav.german": "Герман ном", "nav.mongolian": "Монгол ном", "nav.sell": "Ном зарах",
   "nav.messages": "Мессеж", "nav.notifications": "Мэдэгдэл", "nav.settings": "Тохиргоо", "nav.createAccount": "Бүртгэл үүсгэх",
   "nav.search": "Хайх", "nav.profile": "Миний профайл", "nav.login": "Нэвтрэх", "nav.quick": "Түргэн цэс", "nav.language": "Хэл",
   "search.placeholder": "Ном хайх...",
   "hero.eyebrow": "Дараагийн бүлэгтээ тавтай морил", "hero.subtitle": "Хоёр хэл. Номын нэг ертөнц.",
   "hero.desc": "Англи, герман хэл дээрх номын асар их цуглуулгыг нээж, дараагийн дуртай номоо олоорой.", "hero.button": "Ном үзэх",
-  "home.featured": "Онцлох ном", "home.english": "Англи ном", "home.german": "Герман ном", "home.viewAll": "Бүгдийг үзэх", "home.viewAllBooks": "Бүх номыг үзэх",
+  "home.featured": "Онцлох ном", "home.english": "Англи ном", "home.german": "Герман ном", "home.mongolian": "Монгол ном", "home.viewAll": "Бүгдийг үзэх", "home.viewAllBooks": "Бүх номыг үзэх",
   "home.corner": "Уншлагын булан", "home.fromReaders": "Уншигчдаас", "home.exploreFeed": "Мэдээлэл үзэх", "home.join": "Ярианд нэгдэх",
   "home.emptyTitle": "Бүлэг бүрт зориулсан нийгэмлэг.", "home.emptyDesc": "Юу уншиж байгаагаа хуваалцаж, санал солилцож, ижил түүх хайрладаг хүмүүстэй танилцаарай.", "home.exploreReader": "Уншигчдын мэдээлэл үзэх",
   "book.add": "Сагсанд нэмэх", "book.out": "Дууссан",

@@ -25,12 +25,13 @@ function Navigation({ categories, onNavigate }: { categories: CategoryLink[]; on
   return <>
     <Link href="/" onClick={onNavigate} className="nav-link" style={pathname === "/" ? { color: "#a17b38" } : undefined}>{t("nav.home")}</Link>
     <details className="nav-dropdown"><summary className="nav-link">{t("nav.books")} <ChevronDown size={13} /></summary><div className="dropdown-panel">
-      <Link href="/books" onClick={onNavigate}>{t("nav.allBooks")}</Link><Link href="/books?featured=1" onClick={onNavigate}>{t("nav.featured")}</Link><Link href="/books?language=English" onClick={onNavigate}>{t("nav.english")}</Link><Link href="/books?language=German" onClick={onNavigate}>{t("nav.german")}</Link>
+      <Link href="/books" onClick={onNavigate}>{t("nav.allBooks")}</Link><Link href="/books?featured=1" onClick={onNavigate}>{t("nav.featured")}</Link><Link href="/books?language=English" onClick={onNavigate}>{t("nav.english")}</Link><Link href="/books?language=German" onClick={onNavigate}>{t("nav.german")}</Link><Link href="/books?language=Mongolian" onClick={onNavigate}>{t("nav.mongolian")}</Link>
     </div></details>
     <details className="nav-dropdown"><summary className="nav-link">{t("nav.categories")} <ChevronDown size={13} /></summary><div className="dropdown-panel">
       {categories.map((category) => <Link key={category.slug} href={`/categories/${category.slug}`} onClick={onNavigate}>{category.name}</Link>)}
     </div></details>
     <Link href="/feed" onClick={onNavigate} className="nav-link" style={pathname === "/feed" ? { color: "#a17b38" } : undefined}>{t("nav.feed")}</Link>
+    <Link href="/sell" onClick={onNavigate} className="nav-link" style={pathname === "/sell" ? { color: "#a17b38" } : undefined}>{t("nav.sell")}</Link>
     <Link href="/about" onClick={onNavigate} className="nav-link">{t("nav.about")}</Link>
     <Link href="/contact" onClick={onNavigate} className="nav-link">{t("nav.contact")}</Link>
   </>;

@@ -2,3 +2,5 @@ node_modules
 .next
 .env
 public/uploads
+drizzle.supabase.config.json
+drizzle.supabase.config.json

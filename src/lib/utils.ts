@@ -1,4 +1,6 @@
+// Set NEXT_PUBLIC_CURRENCY=MNT in .env to show tögrög (₮) instead of dollars.
 export function formatPrice(cents: number) {
+  if (process.env.NEXT_PUBLIC_CURRENCY === "MNT") return `₮${Math.round(cents / 100).toLocaleString("en-US")}`;
   return `$${(cents / 100).toFixed(2)}`;
 }
 

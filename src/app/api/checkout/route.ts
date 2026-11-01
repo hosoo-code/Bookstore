@@ -3,6 +3,7 @@ import { books, cartItems, orderItems, orders } from "@/db/schema";
 import { getCurrentUser } from "@/lib/auth";
 import { apiError, readObject, stringValue } from "@/lib/http";
 import { and, eq, gte, inArray, sql } from "drizzle-orm";
+import { splitSale } from "@/lib/fees";
 
 export async function POST(request: Request) {
   const user = await getCurrentUser();
@@ -26,6 +27,7 @@ export async function POST(request: Request) {
       const available = await tx.select().from(books).where(inArray(books.id, validItems.map((item) => item.bookId)));
       const bookMap = new Map(available.map((book) => [book.id, book]));
       if (available.length !== validItems.length) throw new Error("A book in your cart is no longer available.");
+      if (available.some((book) => book.sellerId === user.id)) throw new Error("You can’t buy your own listing.");
       const totalCents = validItems.reduce((total, item) => total + bookMap.get(item.bookId)!.priceCents * item.quantity, 0);
       for (const item of validItems) {
         const [updated] = await tx.update(books).set({ stock: sql`${books.stock} - ${item.quantity}` })
@@ -33,7 +35,7 @@ export async function POST(request: Request) {
         if (!updated) throw new Error(`${bookMap.get(item.bookId)!.title} is out of stock.`);
       }
       const [created] = await tx.insert(orders).values({ userId: user.id, totalCents, shippingName: name, shippingAddress: address, shippingPhone: phone, paymentMethod: "cash_on_delivery" }).returning();
-      await tx.insert(orderItems).values(validItems.map((item) => ({ orderId: created.id, bookId: item.bookId, title: bookMap.get(item.bookId)!.title, quantity: item.quantity, unitPriceCents: bookMap.get(item.bookId)!.priceCents })));
+      await tx.insert(orderItems).values(validItems.map((item) => ({ orderId: created.id, bookId: item.bookId, title: bookMap.get(item.bookId)!.title, quantity: item.quantity, unitPriceCents: bookMap.get(item.bookId)!.priceCents, sellerId: bookMap.get(item.bookId)!.sellerId, ...(bookMap.get(item.bookId)!.sellerId ? splitSale(bookMap.get(item.bookId)!.priceCents * item.quantity) : {}) })));
       await tx.delete(cartItems).where(eq(cartItems.userId, user.id));
       return created;
     });

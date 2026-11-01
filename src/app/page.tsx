@@ -33,6 +33,7 @@ export default async function HomePage() {
       <BookRow title={t("home.featured")} href="/books?featured=1" books={featured} userId={user?.id} savedIds={favoriteIds} />
       <BookRow title={t("home.english")} href="/books?language=English" books={allBooks.filter((book) => book.language === "English")} userId={user?.id} savedIds={favoriteIds} />
       <BookRow title={t("home.german")} href="/books?language=German" books={allBooks.filter((book) => book.language === "German")} userId={user?.id} savedIds={favoriteIds} />
+      <BookRow title={t("home.mongolian")} href="/books?language=Mongolian" books={allBooks.filter((book) => book.language === "Mongolian")} userId={user?.id} savedIds={favoriteIds} />
       <div className="home-promo"><PromoBanner /></div>
       {categories.map((category) => <BookRow key={category.slug} title={categoryName(t, category.slug, category.name)} href={`/categories/${category.slug}`} books={allBooks.filter((book) => book.categorySlug === category.slug)} userId={user?.id} savedIds={favoriteIds} />)}
       <div className="view-all-wrap"><Link href="/books" className="btn-primary">{t("home.viewAllBooks")} <ArrowRight size={14} /></Link></div>
