@@ -1,0 +1,8 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { HelpCircle, Mail, MessageCircle } from "lucide-react";
+import { ContactForm } from "@/components/contact-form";
+export const metadata: Metadata = { title: "Contact", description: "Get in touch with the BookBuch team for questions about books, orders, or your account." };
+export default function ContactPage() {
+  return <div className="site-container page-section"><p className="page-eyebrow">We’re here to help</p><h1 className="page-title">Get in touch.</h1><p className="page-description mb-8">Have a question about a book, your order, or the community? We’d love to hear from you.</p><div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_300px]"><ContactForm /><aside className="space-y-4"><div className="panel p-5"><Mail size={22} className="text-[#b3945c]" /><h2 className="serif mt-3 text-xl text-[#101B30]">Write to us</h2><p className="mt-2 text-xs leading-5 text-[#777]">Use the form and your message will go straight to the BookBuch team.</p></div><div className="panel p-5"><HelpCircle size={22} className="text-[#b3945c]" /><h2 className="serif mt-3 text-xl text-[#101B30]">Quick answers</h2><p className="mt-2 text-xs leading-5 text-[#777]">Check our answers to common questions about ordering, accounts, and reading.</p><Link href="/faq" className="text-arrow mt-4">Visit FAQ →</Link></div><div className="panel p-5"><MessageCircle size={22} className="text-[#b3945c]" /><h2 className="serif mt-3 text-xl text-[#101B30]">Meet other readers</h2><Link href="/feed" className="text-arrow mt-4">Explore the feed →</Link></div></aside></div></div>;
+}
