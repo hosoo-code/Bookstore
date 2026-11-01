@@ -25,7 +25,8 @@ export async function PATCH(request: Request) {
         const items = await tx.select().from(orderItems).where(eq(orderItems.orderId, id));
         for (const item of items) if (item.bookId) await tx.update(books).set({ stock: sql`${books.stock} + ${item.quantity}` }).where(eq(books.id, item.bookId));
       }
-      const [result] = await tx.update(orders).set({ status }).where(eq(orders.id, id)).returning();
+      const paid = status === "delivered" && order.paymentMethod === "cash_on_delivery" && order.paymentStatus !== "paid" ? { paymentStatus: "paid", paidAt: new Date() } : {};
+      const [result] = await tx.update(orders).set({ status, ...paid }).where(eq(orders.id, id)).returning();
       return result;
     });
     return Response.json({ order: updated });

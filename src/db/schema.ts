@@ -97,6 +97,10 @@ export const orders = pgTable("orders", {
   shippingName: text("shipping_name").notNull(),
   shippingAddress: text("shipping_address").notNull(),
   shippingPhone: text("shipping_phone").notNull(),
+  paymentStatus: text("payment_status").notNull().default("unpaid"),
+  paymentUrl: text("payment_url"),
+  paymentRef: text("payment_ref"),
+  paidAt: timestamp("paid_at", { withTimezone: true }),
   createdAt: createdAt(),
 }, (t) => [index("orders_user_idx").on(t.userId)]);
 

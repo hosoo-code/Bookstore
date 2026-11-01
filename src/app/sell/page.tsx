@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { and, desc, eq, ne, sql } from "drizzle-orm";
+import { and, desc, eq, ne, or, sql } from "drizzle-orm";
 import { db } from "@/db";
 import { books, orderItems, orders } from "@/db/schema";
 import { getCurrentUser } from "@/lib/auth";
@@ -18,9 +18,9 @@ export default async function SellPage() {
     getCategories(),
     db.select().from(books).where(eq(books.sellerId, user.id)).orderBy(desc(books.id)),
     db.select({ id: orderItems.id, title: orderItems.title, quantity: orderItems.quantity, earnings: orderItems.sellerEarningsCents, status: orders.status, name: orders.shippingName, address: orders.shippingAddress, phone: orders.shippingPhone, createdAt: orders.createdAt })
-      .from(orderItems).innerJoin(orders, eq(orderItems.orderId, orders.id)).where(eq(orderItems.sellerId, user.id)).orderBy(desc(orders.createdAt)).limit(50),
+      .from(orderItems).innerJoin(orders, eq(orderItems.orderId, orders.id)).where(and(eq(orderItems.sellerId, user.id), ne(orders.status, "cancelled"), or(eq(orders.paymentStatus, "paid"), eq(orders.paymentMethod, "cash_on_delivery")))).orderBy(desc(orders.createdAt)).limit(50),
     db.select({ earnings: sql<number>`coalesce(sum(${orderItems.sellerEarningsCents}),0)::int`, fees: sql<number>`coalesce(sum(${orderItems.feeCents}),0)::int` })
-      .from(orderItems).innerJoin(orders, eq(orderItems.orderId, orders.id)).where(and(eq(orderItems.sellerId, user.id), ne(orders.status, "cancelled"))),
+      .from(orderItems).innerJoin(orders, eq(orderItems.orderId, orders.id)).where(and(eq(orderItems.sellerId, user.id), eq(orders.paymentStatus, "paid"))),
   ]);
   return <div className="site-container page-section">
     <h1 className="page-title">Sell your books</h1>

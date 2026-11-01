@@ -19,6 +19,11 @@ Next.js 16 (App Router) + TypeScript + Tailwind 4 + Drizzle ORM + PostgreSQL. Su
 | `R2_BUCKET` | Үгүй | Bucket-ийн нэр |
 | `R2_PUBLIC_URL` | Үгүй | Bucket-ийн нийтийн хаяг (`https://pub-xxx.r2.dev` эсвэл өөрийн домэйн) |
 
+| `BONUM_GATEWAY_BASE_URL` | Үгүй | Test: `https://testapi.bonum.mn`, Production: `https://apis.bonum.mn` |
+| `BONUM_APP_SECRET` | Үгүй | Bonum merchant portal-оос (зөвхөн сервер) |
+| `BONUM_TERMINAL_ID` | Үгүй | Bonum terminal ID |
+| `BONUM_MERCHANT_CHECKSUM_KEY` | Үгүй | Webhook гарын үсэг шалгах түлхүүр (Bonum олгоно) |
+
 Supabase хувьсагчгүй бол сайт local бүртгэл (scrypt нууц үг, DB session) ашиглана. R2 хувьсагч бүрэн байвал зургийг Cloudflare R2-д, үгүй бол `public/uploads` хавтсанд хадгална.
 
 ### Cloudflare R2 тохируулах
@@ -59,6 +64,17 @@ npm run dev -- --webpack                 # Android дээр Turbopack ажилл
 - Захиалга хийхэд `order_items`-д `fee_cents` (10%) ба `seller_earnings_cents` хадгалагдана. Сайтын өөрийн номонд шимтгэл тооцохгүй.
 - Админ `/admin` дээр нийт шимтгэл, зарсан хүн бүрийн орлогыг харна.
 - Төлбөр одоогоор зөвхөн хүргэлтээр (cash on delivery). Мөнгө шилжүүлэлт гараар хийгдэнэ; QPay/банк холбоогүй.
+
+## QPay (Bonum) төлбөр
+
+Дээрх 4 `BONUM_*` хувьсагч + `NEXT_PUBLIC_CURRENCY=MNT` + нийтийн `https` `NEXT_PUBLIC_SITE_URL` байвал checkout автоматаар онлайн төлбөр болно, үгүй бол хүргэлтээр төлөх хэвээр.
+
+1. Checkout захиалгыг үүсгээд (нөөц хасагдана) Bonum invoice үүсгэж, хэрэглэгчийг төлбөрийн хуудас руу шилжүүлнэ.
+2. Төлбөр дууссан үед Bonum `POST /api/payments/bonum/webhook` руу дуудна (`x-checksum-v2` HMAC-SHA256-аар шалгана). SUCCESS → `payment_status = paid`, FAILED → захиалга цуцлагдаж нөөц буцна.
+3. Шимтгэл (10%) зөвхөн `paid` захиалгаас тооцогдоно. Хүргэлтээр төлөх захиалга "delivered" болоход `paid` болно.
+4. 35 минутын дотор төлөөгүй захиалга автоматаар цуцлагдана.
+
+Webhook URL-ийг Bonum merchant portal дээр `https://ТАНЫ-ДОМЭЙН/api/payments/bonum/webhook` гэж бүртгэнэ. Localhost руу Bonum дуудаж чадахгүй тул тест хийхдээ Cloudflare Tunnel зэрэг ашигла.
 
 ## Админ эрх
 
