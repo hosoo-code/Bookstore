@@ -13,9 +13,19 @@ Next.js 16 (App Router) + TypeScript + Tailwind 4 + Drizzle ORM + PostgreSQL. Su
 | `NEXT_PUBLIC_CURRENCY` | Үгүй | `MNT` бол ₮, хоосон бол $ |
 | `NEXT_PUBLIC_SUPABASE_URL` | Үгүй | Supabase төслийн URL |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Үгүй | Supabase public key (`..._PUBLISHABLE_KEY` ч болно) |
-| `SUPABASE_SERVICE_ROLE_KEY` | Үгүй | Зөвхөн сервер талд, зураг upload-д. `NEXT_PUBLIC_` угтвар **хэзээ ч** бүү тавь |
+| `R2_ACCOUNT_ID` | Үгүй | Cloudflare account ID |
+| `R2_ACCESS_KEY_ID` | Үгүй | R2 API token-ий Access Key ID |
+| `R2_SECRET_ACCESS_KEY` | Үгүй | R2 API token-ий Secret (зөвхөн сервер, `NEXT_PUBLIC_` бүү тавь) |
+| `R2_BUCKET` | Үгүй | Bucket-ийн нэр |
+| `R2_PUBLIC_URL` | Үгүй | Bucket-ийн нийтийн хаяг (`https://pub-xxx.r2.dev` эсвэл өөрийн домэйн) |
 
-Supabase хувьсагчгүй бол сайт local бүртгэл (scrypt нууц үг, DB session), `public/uploads` хавтас ашиглана.
+Supabase хувьсагчгүй бол сайт local бүртгэл (scrypt нууц үг, DB session) ашиглана. R2 хувьсагч бүрэн байвал зургийг Cloudflare R2-д, үгүй бол `public/uploads` хавтсанд хадгална.
+
+### Cloudflare R2 тохируулах
+1. Cloudflare → R2 → **Create bucket**.
+2. Bucket → Settings → **Public access** асааж `r2.dev` хаягийг аваад `R2_PUBLIC_URL`-д тавь.
+3. R2 → **Manage API tokens** → Object Read & Write эрхтэй token үүсгэж Access Key, Secret-ийг `.env`-д хуул.
+4. `npm install` (шинэ `@aws-sdk/client-s3` сан суухад).
 
 ## Local ажиллуулах (Termux / Linux)
 
@@ -62,7 +72,7 @@ psql -d app_db -c "UPDATE profiles SET role='admin' WHERE email='таны@email'
 1. Connect → **Session pooler** URI-г `DATABASE_URL`-д тавь.
 2. `npx drizzle-kit push` (эсвэл `npx drizzle-kit generate` гаргасан SQL-ийг SQL Editor-т ажиллуул).
 3. **Дараа нь** `supabase/policies.sql`-ийг SQL Editor-т нэг удаа ажиллуул.
-4. Supabase хувьсагчдыг сервер дээр тохируул.
+4. Supabase болон R2 хувьсагчдыг сервер дээр тохируул.
 
 ## Түгээмэл алдаа
 

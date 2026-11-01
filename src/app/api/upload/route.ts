@@ -3,7 +3,17 @@ import { apiError } from "@/lib/http";
 import { randomUUID } from "node:crypto";
 import { mkdir, writeFile } from "node:fs/promises";
 import { join } from "node:path";
-import { createClient } from "@supabase/supabase-js";
+import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+
+function r2Client() {
+  const { R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_BUCKET, R2_PUBLIC_URL } = process.env;
+  if (!R2_ACCOUNT_ID || !R2_ACCESS_KEY_ID || !R2_SECRET_ACCESS_KEY || !R2_BUCKET || !R2_PUBLIC_URL) return null;
+  return {
+    bucket: R2_BUCKET,
+    publicUrl: R2_PUBLIC_URL.replace(/\/+$/, ""),
+    client: new S3Client({ region: "auto", endpoint: `https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com`, credentials: { accessKeyId: R2_ACCESS_KEY_ID, secretAccessKey: R2_SECRET_ACCESS_KEY } }),
+  };
+}
 
 export async function POST(request: Request) {
   const user = await getCurrentUser();
@@ -21,12 +31,11 @@ export async function POST(request: Request) {
   if (!valid) return apiError("The uploaded file is not a valid image.");
   const filename = `${randomUUID()}.${ext}`;
   try {
-    if (process.env.SUPABASE_SERVICE_ROLE_KEY && process.env.NEXT_PUBLIC_SUPABASE_URL) {
-      const client = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY, { auth: { persistSession: false } });
-      const { error } = await client.storage.from("bookbuch-media").upload(`${user.id}/${filename}`, buffer, { contentType: file.type, upsert: false });
-      if (error) throw error;
-      const { data } = client.storage.from("bookbuch-media").getPublicUrl(`${user.id}/${filename}`);
-      return Response.json({ url: data.publicUrl });
+    const r2 = r2Client();
+    if (r2) {
+      const key = `${user.id}/${filename}`;
+      await r2.client.send(new PutObjectCommand({ Bucket: r2.bucket, Key: key, Body: buffer, ContentType: file.type, CacheControl: "public, max-age=31536000, immutable" }));
+      return Response.json({ url: `${r2.publicUrl}/${key}` });
     }
     const directory = join(process.cwd(), "public", "uploads");
     await mkdir(directory, { recursive: true });

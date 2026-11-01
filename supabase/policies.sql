@@ -143,9 +143,7 @@ CREATE POLICY reports_insert ON public.user_reports FOR INSERT TO authenticated 
 CREATE POLICY reports_update ON public.user_reports FOR UPDATE TO authenticated USING (public.bookbuch_is_admin()) WITH CHECK (public.bookbuch_is_admin());
 CREATE POLICY contact_admin_read ON public.contact_messages FOR SELECT TO authenticated USING (public.bookbuch_is_admin());
 
--- Server-side uploads use the service role key; only public image reads are allowed in Storage.
-INSERT INTO storage.buckets (id, name, public) VALUES ('bookbuch-media', 'bookbuch-media', true) ON CONFLICT (id) DO NOTHING;
-CREATE POLICY bookbuch_media_public_read ON storage.objects FOR SELECT USING (bucket_id = 'bookbuch-media');
+-- Image uploads use Cloudflare R2 (see DEVELOPMENT.md); Supabase Storage is not used.
 
 -- The Realtime client only receives rows permitted by messages/notifications SELECT policies.
 DO $$ BEGIN

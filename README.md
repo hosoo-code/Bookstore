@@ -17,12 +17,12 @@ Set these environment variables on the server:
 - `DATABASE_URL`: direct PostgreSQL connection string for **the same Supabase project** (required for Supabase Realtime to observe message inserts).
 - `NEXT_PUBLIC_SUPABASE_URL`: project URL.
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY` or `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`: public browser key.
-- `SUPABASE_SERVICE_ROLE_KEY`: **server-side only**, used to upload images to the `bookbuch-media` storage bucket.
+- `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_BUCKET`, `R2_PUBLIC_URL`: Cloudflare R2 image storage (server-only secrets).
 - `NEXT_PUBLIC_SITE_URL`: public website URL for sitemap URLs.
 
 Apply the Drizzle schema with `npx drizzle-kit push`, then run `supabase/policies.sql` in the Supabase SQL Editor to configure RLS, Storage, and the Realtime publication. With these values present, authentication uses Supabase Auth and cookie refresh through `src/proxy.ts`; Realtime subscribes to authorized message inserts, while polling covers reconnection. Email confirmation follows the project's Supabase Auth settings. Never prefix the service-role key with `NEXT_PUBLIC_`.
 
-Uploaded files use Supabase Storage when a service-role key is present. For local use, uploads are written to `public/uploads` (a writable, persistent filesystem is required). On read-only hosting, configure Supabase Storage.
+Uploaded files use Cloudflare R2 when the R2 variables are set. For local use, uploads are written to `public/uploads` (a writable, persistent filesystem is required). On read-only hosting, configure Cloudflare R2.
 
 ## Administrator access
 
